@@ -161,21 +161,14 @@
         If offset <> 0 Then
             Dim b() As Char = result.ToCharArray()
             Dim pp As Integer = result.IndexOf("."c)
+            Dim s As Integer = If(offset > 0, 1, -1)
 
             Do
-                If offset > 0 Then
-                    tmp = b(pp)
-                    b(pp) = b(pp + 1)
-                    b(pp + 1) = tmp
-                    pp += 1
-                    offset -= 1
-                Else
-                    tmp = b(pp)
-                    b(pp) = b(pp - 1)
-                    b(pp - 1) = tmp
-                    pp -= 1
-                    offset += 1
-                End If
+                tmp = b(pp)
+                b(pp) = b(pp + s)
+                b(pp + s) = tmp
+                pp += s
+                offset -= s
             Loop Until offset = 0
 
             result = New String(b)
