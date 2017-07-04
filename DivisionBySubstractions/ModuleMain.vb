@@ -1,16 +1,16 @@
 ﻿Module ModuleMain
     Sub Main(arg() As String)
-        Dim dividend As Long
-        Dim divisor As Long
+        Dim dividend As Double
+        Dim divisor As Double
         Dim precision As Integer = 24
         Dim round As Boolean = False
 
         If arg.Length >= 2 Then
-            If Not Long.TryParse(arg(0), dividend) Then
+            If Not Double.TryParse(arg(0), dividend) Then
                 ShowMessage($"Invalid dividend value: {dividend}", ConsoleColor.Red)
                 Exit Sub
             End If
-            If Not Long.TryParse(arg(1), divisor) OrElse divisor = 0 Then
+            If Not Double.TryParse(arg(1), divisor) OrElse divisor = 0 Then
                 ShowMessage($"Invalid divisor value: {divisor}", ConsoleColor.Red)
                 Exit Sub
             End If
@@ -57,7 +57,7 @@
 #End If
     End Sub
 
-    Private Function Divide(dividend As Long, divisor As Long, precision As Integer, round As Boolean) As String
+    Private Function Divide(dividend As Double, divisor As Double, precision As Integer, round As Boolean) As String
         Dim dividentSign As Integer = Math.Sign(dividend)
         Dim divisorSign As Integer = Math.Sign(divisor)
 
@@ -65,21 +65,38 @@
         divisor = Math.Abs(divisor)
         If round Then precision += 1 ' This is to be able to round the last digit
 
-        Dim tmpDivident As Long = dividend
+        Dim lastDigitIndex = Function(n As Double) As Integer
+                                 Dim ns As String = n.ToString()
+                                 If ns.Contains(".") Then
+                                     Return ns.Split("."c)(1).Length
+                                 Else
+                                     Return 0
+                                 End If
+                             End Function
+
+        Dim dividendMult As Integer = lastDigitIndex(dividend)
+        dividend *= 10 ^ dividendMult
+        Dim divisorMult As Integer = lastDigitIndex(divisor)
+        divisor *= 10 ^ divisorMult
+
+        Dim tmpDividend As Long = CType(dividend, Long)
+        Dim tmpDivisor As Long = CType(divisor, Long)
 
         Dim intCounter As ULong = 0
         Dim decCounter As ULong = 0
         Dim isDecimal As Boolean
         Dim decPart As String = "0"
+        Dim p As Integer
+        Dim tmp As Char
 
         If divisor = 0 Then
             If dividend = 0 Then Return "Undefined"
             Return "Infinity"
         End If
 
-        If dividend > 0 Then
+        If tmpDividend > 0 Then
             Do
-                If tmpDivident < divisor Then
+                If tmpDividend < tmpDivisor Then
                     If isDecimal Then
                         If decPart.Length >= precision Then
                             isDecimal = False
@@ -93,28 +110,28 @@
                     decCounter = 0
 
                     Do
-                        tmpDivident *= 10
-                        If tmpDivident >= divisor Then Exit Do
+                        tmpDividend *= 10
+                        If tmpDividend >= tmpDivisor Then Exit Do
                         decPart += "0"
                     Loop
                 End If
-                tmpDivident -= divisor
+                tmpDividend -= tmpDivisor
 
                 If isDecimal Then
                     decCounter += 1UL
                 Else
                     intCounter += 1UL
                 End If
-            Loop Until tmpDivident = 0
+            Loop Until tmpDividend = 0
 
             If isDecimal Then decPart += decCounter.ToString()
         Else
             dividentSign = divisorSign
         End If
 
-        If decPart.Length > 0 Then
+        If decPart.Length >= precision Then
             If round Then
-                Dim p As Integer = precision
+                p = precision
                 Dim n As Integer
                 Dim dp() As Char = decPart.ToCharArray()
 
@@ -122,7 +139,7 @@
                     p -= 2
                     For p = p To 0 Step -1
                         n = Integer.Parse(dp(p)) + 1
-                        If n = 10 Then ' I miss the MID$ function ;)
+                        If n = 10 Then ' I miss the left-hand-side MID$ function ;)
                             dp(p) = "0"c
                         Else
                             dp(p) = Convert.ToChar(n + 48)
@@ -138,9 +155,38 @@
             If decPart.Length > precision Then decPart = decPart.Substring(0, precision)
         End If
 
-        Return String.Format("{0}{1}.{2}", If(dividentSign <> divisorSign, "-", ""),
-                                       intCounter,
-                                       decPart.PadRight(precision, "0"c))
+        Dim result As String = $"{intCounter}.{decPart.PadRight(precision, "0"c)}"
+        Dim offset As Integer = divisorMult - dividendMult
+
+        If offset <> 0 Then
+            Dim b() As Char = result.ToCharArray()
+            Dim pp As Integer = result.IndexOf("."c)
+
+            Do
+                If offset > 0 Then
+                    tmp = b(pp)
+                    b(pp) = b(pp + 1)
+                    b(pp + 1) = tmp
+                    pp += 1
+                    offset -= 1
+                Else
+                    tmp = b(pp)
+                    b(pp) = b(pp - 1)
+                    b(pp - 1) = tmp
+                    pp -= 1
+                    offset += 1
+                End If
+            Loop Until offset = 0
+
+            result = New String(b)
+
+            Dim tokens() As String = result.Split("."c)
+            intCounter = ULong.Parse(tokens(0))
+            decPart = If(tokens(1).Length > precision, tokens(1).Substring(0, precision - 1), tokens(1))
+            result = $"{intCounter}.{decPart.PadRight(precision, "0"c)}"
+        End If
+
+        Return $"{If(dividentSign <> divisorSign, "-", "")}{result}"
     End Function
 
     Private Sub ShowMessage(msg As String, Optional c As ConsoleColor = ConsoleColor.Gray)
