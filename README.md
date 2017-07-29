@@ -1,4 +1,4 @@
-# DivisionBySubstractions
+# DivisionBySubtractions
 
 Simple implementation of a function to divide very large numbers with an arbitrary precision using successive subtractions.
 For example, 128/8 is the same as subtracting 8 from 128, 16 times.
