@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{5711E979-EB34-453A-9138-8B7D44C61876}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <StartupObject>DivisionBySubstractions.ModuleMain</StartupObject>
-    <RootNamespace>DivisionBySubstractions</RootNamespace>
+    <StartupObject>DivisionBySubtractions.ModuleMain</StartupObject>
+    <RootNamespace>DivisionBySubtractions</RootNamespace>
     <AssemblyName>dbs</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Console</MyType>
