@@ -10,5 +10,5 @@ Here's the result of dividing 915.27 by 37768.2313358 using 32 digits of precisi
 **dbs** dividend divisor [precision] [r]
 * dividend: Any number from Double.Min to Double.Max
 * divisor: Any number from Double.Min to Double.Max
-* precision: An integer representing the number of decimal places
+* precision: A positive integer representing the number of decimal places
 * r: If included, the result will be rounded
