@@ -6,23 +6,34 @@
         Dim round As Boolean = False
         Dim removeTrailingZeros As Boolean = False
 
-        If arg.Length >= 2 Then
-            If Not Double.TryParse(arg(0), dividend) Then
-                ShowMessage($"Invalid dividend value: {dividend}", ConsoleColor.Red)
-                Exit Sub
-            End If
-            If Not Double.TryParse(arg(1), divisor) OrElse divisor = 0 Then
-                ShowMessage($"Invalid divisor value: {divisor}", ConsoleColor.Red)
-                Exit Sub
-            End If
+        ' 915.27  37768.2313358 32
 
-            ' TODO: Implement loop to analyze the remaining arguments so they can be provided in any order
-            If (arg.Length > 2 AndAlso Not Integer.TryParse(arg(2), precision)) OrElse precision <= 0 Then
-                ShowMessage($"Invalid precision value: {precision}", ConsoleColor.Red)
-                Exit Sub
-            End If
-            round = arg.Length > 3 AndAlso arg(3) = "r"
-            removeTrailingZeros = arg.Length > 4 AndAlso arg(4) = "z"
+        If arg.Length >= 2 Then
+            For i As Integer = 0 To arg.Length - 1
+                Select Case i
+                    Case 0
+                        If Not Double.TryParse(arg(i), dividend) Then
+                            ShowMessage($"Invalid dividend value: {dividend}", ConsoleColor.Red)
+                            Exit Sub
+                        End If
+                    Case 1
+                        If Not Double.TryParse(arg(i), divisor) OrElse divisor = 0 Then
+                            ShowMessage($"Invalid divisor value: {divisor}", ConsoleColor.Red)
+                            Exit Sub
+                        End If
+                    Case Else
+                        If Char.IsNumber(arg(i)(0)) Then
+                            If Not Integer.TryParse(arg(i), precision) OrElse precision <= 0 Then
+                                ShowMessage($"Invalid precision value: {precision}", ConsoleColor.Red)
+                                Exit Sub
+                            End If
+                        ElseIf arg(i) = "z" Then
+                            removeTrailingZeros = True
+                        ElseIf arg(i) = "r" Then
+                            round = True
+                        End If
+                End Select
+            Next
         Else
             ShowMessage($"{My.Application.Info.AssemblyName} {My.Application.Info.Version}", ConsoleColor.White)
             Console.WriteLine()
@@ -185,7 +196,7 @@
 
         If removeTrailingZeros Then
             While result.Last() = "0"c AndAlso Not result(result.Length - 2) = "."c
-                result = result.Substring(0, result.Length - 2)
+                result = result.Substring(0, result.Length - 1)
             End While
         End If
 
