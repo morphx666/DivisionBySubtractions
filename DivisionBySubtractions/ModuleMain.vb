@@ -4,6 +4,7 @@
         Dim divisor As Double
         Dim precision As Integer = 24
         Dim round As Boolean = False
+        Dim removeTrailingZeros As Boolean = False
 
         If arg.Length >= 2 Then
             If Not Double.TryParse(arg(0), dividend) Then
@@ -14,16 +15,19 @@
                 ShowMessage($"Invalid divisor value: {divisor}", ConsoleColor.Red)
                 Exit Sub
             End If
+
+            ' TODO: Implement loop to analyze the remaining arguments so they can be provided in any order
             If (arg.Length > 2 AndAlso Not Integer.TryParse(arg(2), precision)) OrElse precision <= 0 Then
                 ShowMessage($"Invalid precision value: {precision}", ConsoleColor.Red)
                 Exit Sub
             End If
             round = arg.Length > 3 AndAlso arg(3) = "r"
+            removeTrailingZeros = arg.Length > 4 AndAlso arg(4) = "z"
         Else
             ShowMessage($"{My.Application.Info.AssemblyName} {My.Application.Info.Version}", ConsoleColor.White)
             Console.WriteLine()
             ShowMessage("Usage", ConsoleColor.Green)
-            ShowMessage($"  {My.Application.Info.AssemblyName} dividend divisor [precision] [r]")
+            ShowMessage($"  {My.Application.Info.AssemblyName} dividend divisor [precision] [r] [z]")
             Console.WriteLine()
             ShowMessage("Example", ConsoleColor.Green)
             ShowMessage($"  {My.Application.Info.AssemblyName} 1 3 24")
@@ -46,7 +50,7 @@
         Console.WriteLine()
 
         tmr.Restart()
-        res = Divide(dividend, divisor, precision, round)
+        res = Divide(dividend, divisor, precision, round, removeTrailingZeros)
         tmr.Stop()
         ShowMessage($"Algorithm: {tmr.ElapsedMilliseconds:N0}ms", ConsoleColor.Yellow)
         ShowMessage($"{dividend} / {divisor} = {res}", ConsoleColor.White)
@@ -57,7 +61,7 @@
 #End If
     End Sub
 
-    Private Function Divide(dividend As Double, divisor As Double, precision As Integer, round As Boolean) As String
+    Private Function Divide(dividend As Double, divisor As Double, precision As Integer, round As Boolean, removeTrailingZeros As Boolean) As String
         Dim dividentSign As Integer = Math.Sign(dividend)
         Dim divisorSign As Integer = Math.Sign(divisor)
 
@@ -177,6 +181,12 @@
             intCounter = ULong.Parse(tokens(0))
             decPart = If(tokens(1).Length > precision, tokens(1).Substring(0, precision - 1), tokens(1))
             result = $"{intCounter}.{decPart.PadRight(precision, "0"c)}"
+        End If
+
+        If removeTrailingZeros Then
+            While result.Last() = "0"c AndAlso Not result(result.Length - 2) = "."c
+                result = result.Substring(0, result.Length - 2)
+            End While
         End If
 
         Return $"{If(dividentSign <> divisorSign, "-", "")}{result}"

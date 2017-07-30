@@ -31,5 +31,5 @@ Imports System.Runtime.InteropServices
 ' by using the '*' as shown below:
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
-<Assembly: AssemblyVersion("2017.7.29.132")>
-<Assembly: AssemblyFileVersion("2017.7.4.131")>
+<Assembly: AssemblyVersion("2017.7.30.136")>
+<Assembly: AssemblyFileVersion("2017.7.30.135")>
