@@ -161,7 +161,7 @@
                     p -= 2
                     For p = p To 0 Step -1
                         n = Integer.Parse(dp(p)) + 1
-                        If n = 10 Then ' I miss the left-hand-side MID$ function ;)
+                        If n = 10 Then ' I miss the left-hand-side MID$ function from VB6 ;)
                             dp(p) = "0"c
                         Else
                             dp(p) = Convert.ToChar(n + 48)
@@ -181,9 +181,9 @@
         Dim offset As Integer = divisorMult - dividendMult
 
         If offset <> 0 Then
-            Dim b() As Char = result.ToCharArray()
             Dim pp As Integer = result.IndexOf("."c)
             Dim s As Integer = If(offset > 0, 1, -1)
+            Dim b() As Char = result.ToCharArray()
 
             Do
                 tmp = b(pp)
@@ -191,6 +191,13 @@
                 b(pp + s) = tmp
                 pp += s
                 offset -= s
+
+                If pp + s < 0 Then
+                    ReDim Preserve b(b.Length)
+                    Array.Copy(b, 0, b, 1, b.Length - 1)
+                    b(0) = "0"c
+                    pp += 1
+                End If
             Loop Until offset = 0
 
             result = New String(b)
@@ -211,8 +218,9 @@
     End Function
 
     Private Sub ShowMessage(msg As String, Optional c As ConsoleColor = ConsoleColor.Gray)
+        Dim oc As ConsoleColor = Console.ForegroundColor
         Console.ForegroundColor = c
         Console.WriteLine(msg)
-        Console.ForegroundColor = ConsoleColor.Gray
+        Console.ForegroundColor = oc
     End Sub
 End Module
