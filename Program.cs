@@ -61,14 +61,20 @@ namespace DivisionBySubtractions {
                 //divisor = 3;
                 //precision = 24;
 
-                dividend = 77;
-                divisor = 1923;
-                precision = 13;
-                round = true;
+                //dividend = 77;
+                //divisor = 1923;
+                //precision = 13;
+                //round = true;
 
-                dividend = 99977099456547945;
-                divisor = 1912584907252377.128;
-                precision = 320;
+                //dividend = 99977099456547945;
+                //divisor = 1912584907252377.128;
+                //precision = 320;
+                //round = true;
+
+                dividend = 17.27;
+                divisor = 7285.1957;
+                precision = Console.WindowWidth - 25;
+                removeTrailingZeros = true;
             }
 
             string res;
@@ -85,7 +91,7 @@ namespace DivisionBySubtractions {
         }
 
         private static string Divide(double dividend, double divisor, int precision, bool round, bool removeTrailingZeros) {
-            int dividentSign = Math.Sign(dividend);
+            int dividendSign = Math.Sign(dividend);
             int divisorSign = Math.Sign(divisor);
 
             dividend = Math.Abs(dividend);
@@ -147,7 +153,7 @@ namespace DivisionBySubtractions {
 
                 if(isDecimal) decPart += decCounter;
             } else {
-                dividentSign = divisorSign;
+                dividendSign = divisorSign;
             }
 
             if(decPart.Length >= precision) {
@@ -211,7 +217,7 @@ namespace DivisionBySubtractions {
                 }
             }
 
-            return $"{(dividentSign != divisorSign ? "-" : "")}{result}";
+            return $"{(dividendSign != divisorSign ? "-" : "")}{result}";
         }
 
         private static void ShowMessage(string msg, ConsoleColor c = ConsoleColor.Gray) {
