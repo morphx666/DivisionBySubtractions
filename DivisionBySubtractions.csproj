@@ -4,8 +4,8 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>disable</Nullable>
-    <AssemblyVersion>2024.4.27.55</AssemblyVersion>
-    <FileVersion>2024.4.27.55</FileVersion>
+    <AssemblyVersion>2024.4.27.66</AssemblyVersion>
+    <FileVersion>2024.4.27.66</FileVersion>
     <AssemblyName>dbs</AssemblyName>
   </PropertyGroup>
   <ItemGroup>

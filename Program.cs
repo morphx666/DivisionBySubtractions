@@ -42,21 +42,6 @@ namespace DivisionBySubtractions {
                     }
                 }
             } else {
-                string asmName = typeof(DivisionBySubtractions).Assembly.GetName().Name;
-                string asmVersion = typeof(DivisionBySubtractions).Assembly.GetName().Version.ToString();
-
-                ShowMessage($"{asmName} {asmVersion}\n", ConsoleColor.White);
-                ShowMessage("Usage", ConsoleColor.Green);
-                ShowMessage($"  {asmName} dividend divisor [precision] [r] [z]\n");
-                ShowMessage("Arguments", ConsoleColor.Green);
-                ShowMessage($"  dividend: a number to be divided by another number; the numerator on a division.");
-                ShowMessage($"  divisor: a number by which another number is to be divided; the denominator.");
-                ShowMessage($"  precision: optional parameter to specify the number of decimal digits to calculate.");
-                ShowMessage($"  r: optional parameter to force rounding on the last digit.");
-                ShowMessage($"  z: optional parameter to force the removal of trailing zeros.\n");
-                ShowMessage("Example", ConsoleColor.Green);
-                ShowMessage($"  {asmName} 1 3 24\n");
-
                 //dividend = 1;
                 //divisor = 3;
                 //precision = 24;
@@ -74,7 +59,23 @@ namespace DivisionBySubtractions {
                 dividend = 17.27;
                 divisor = 7285.1957;
                 precision = Console.WindowWidth - 25;
+                round = true;
                 removeTrailingZeros = true;
+
+                string asmName = typeof(DivisionBySubtractions).Assembly.GetName().Name;
+                string asmVersion = typeof(DivisionBySubtractions).Assembly.GetName().Version.ToString();
+
+                ShowMessage($"{asmName} {asmVersion}\n", ConsoleColor.White);
+                ShowMessage("Usage", ConsoleColor.Green);
+                ShowMessage($"  {asmName} dividend divisor [precision] [r] [z]\n");
+                ShowMessage("Arguments", ConsoleColor.Green);
+                ShowMessage($"  dividend: a number to be divided by another number; the numerator on a division.");
+                ShowMessage($"  divisor: a number by which another number is to be divided; the denominator.");
+                ShowMessage($"  precision: optional parameter to specify the number of decimal digits to calculate.");
+                ShowMessage($"  r: optional parameter to force rounding on the last digit.");
+                ShowMessage($"  z: optional parameter to force the removal of trailing zeros.\n");
+                ShowMessage("Example", ConsoleColor.Green);
+                ShowMessage($"  {asmName} {dividend} {divisor} {precision} {(round ? "r " : "")}{(removeTrailingZeros ? "z " : "")}\n");
             }
 
             string res;
