@@ -1,8 +1,7 @@
 ﻿using System.Diagnostics;
-using System.Text;
 
-' Example:
-' ./dbs 17.27 7285.1957 5000 z
+// Example:
+// ./dbs 17.27 7285.1957 5000 z
 
 namespace DivisionBySubtractions {
     public class DivisionBySubtractions {
